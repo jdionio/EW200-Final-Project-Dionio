@@ -5,3 +5,6 @@ TILE_SIZE = 64
 
 # Speed of player
 PLAYER_SPEED = 3.0
+
+# Limit frames per second of game
+FPS = 60
