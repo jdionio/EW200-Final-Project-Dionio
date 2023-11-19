@@ -4,7 +4,8 @@ import sys
 # Import necessary files
 from parameters import *
 from background import draw_background
-from player import Player
+from player import Player, all_sprites
+from bullet import Bullet
 
 # Initialize pygame
 pygame.init()
@@ -17,7 +18,8 @@ pygame.display.set_caption('Zombie Shooter')
 clock = pygame.time.Clock()
 
 player = Player()
-
+# Add player instance to all sprite group
+all_sprites.add(player)
 
 
 
@@ -35,13 +37,12 @@ while running:
             pygame.quit()
             sys.exit()
 
-    player.update()
 
     # Draw background
     screen.blit(background, (0,0))
-
-    # Draw player
-    player.draw(screen)
+    # Draws all sprites on screen and updates
+    all_sprites.draw(screen)
+    all_sprites.update()
 
     # Update display
     pygame.display.flip()
