@@ -6,6 +6,7 @@ from parameters import *
 from background import draw_background
 from player import Player, all_sprites
 from bullet import Bullet
+from camera import Camera
 
 # Initialize pygame
 pygame.init()
@@ -18,6 +19,7 @@ pygame.display.set_caption('Zombie Shooter')
 clock = pygame.time.Clock()
 
 player = Player()
+camera = Camera()
 # Add player instance to all sprite group
 all_sprites.add(player)
 
