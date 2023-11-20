@@ -23,6 +23,8 @@ class Player(pygame.sprite.Sprite):
         self.rect = self.hitbox_rect.copy()
         self.shoot = False
         self.shoot_cooldown = 0
+        # We want to create the bullet at the end of the gun barrel, so there will be some offset
+        self.gun_barrel_offset = pygame.math.Vector2(GUN_OFFSET_X, GUN_OFFSET_Y)
 
     # Check if key is pressed and move player accordingly
     def user_input(self):
@@ -55,8 +57,9 @@ class Player(pygame.sprite.Sprite):
     def shooting(self):
         # Check if player has already shot
         if self.shoot_cooldown == 0:
-            self.shoot_cooldown = 20
-            bullet_pos = self.pos
+            self.shoot_cooldown = SHOOT_COOLDOWN
+            # Make bullet equal to player position and account for gun barrel offset
+            bullet_pos = self.pos + self.gun_barrel_offset.rotate(self.angle)
             self.bullet = Bullet(bullet_pos[0], bullet_pos[1], self.angle)
             bullets.add(self.bullet)
             all_sprites.add(self.bullet)
