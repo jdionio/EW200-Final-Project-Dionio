@@ -74,9 +74,10 @@ class Player(pygame.sprite.Sprite):
     def rotate_player(self):
         # Crate a variable that tracks mouse position
         self.mouse_pos = pygame.mouse.get_pos()  # Returns a list of an x and y coordinate
-        # Variables to find distance between mouse and player
-        self.x_player_to_mouse = (self.mouse_pos[0] - self.hitbox_rect.centerx)
-        self.y_player_to_mouse = (self.mouse_pos[1] - self.hitbox_rect.centery)
+        # Variables to find distance between mouse and player (note that player position is in middle of screen as
+        # the player isn't moving, the screen is!
+        self.x_player_to_mouse = (self.mouse_pos[0] - SCREEN_WIDTH // 2)
+        self.y_player_to_mouse = (self.mouse_pos[1] - SCREEN_HEIGHT // 2)
         # Finds the angle between mouse and player using the distances and making a triangle (more trig)
         self.angle = math.degrees(math.atan2(self.y_player_to_mouse, self.x_player_to_mouse))
         # Rotate the image to the angle (note that angle is negative)
