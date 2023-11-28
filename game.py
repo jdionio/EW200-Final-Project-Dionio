@@ -5,6 +5,7 @@ import sys
 from parameters import *
 from player import Player, all_sprites
 from bullet import Bullet
+from enemy import Enemy, enemies
 
 # Initialize pygame
 pygame.init()
@@ -31,17 +32,18 @@ class Camera(pygame.sprite.Group):
         floor_offset_pos = self.floor_rect.topleft - self.offset
         screen.blit(background, floor_offset_pos)
 
-        # Account for offset for each  whilst moving
+        # Account for offset for each sprite whilst moving
         for sprite in all_sprites:
             offset_pos = sprite.rect.topleft - self.offset
             screen.blit(sprite.image, offset_pos)
 
 player = Player()
 camera = Camera()
-# Add player instance to all sprite group
+zombie = Enemy(400,400, player)
+# Add player and enemy instance to all sprites group
+enemies.add(zombie)
 all_sprites.add(player)
-
-
+all_sprites.add(zombie)
 
 
 
@@ -60,9 +62,11 @@ while running:
     # Draw background
     screen.blit(background, (0,0))
     # Draws all sprites on screen and updates
-    all_sprites.draw(screen)
+
     all_sprites.update()
+    # Draw all sprites on screen in accordance to the offset
     camera.custom_draw()
+    # Make enemy hunt player
     # Update display
     pygame.display.flip()
 
