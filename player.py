@@ -10,6 +10,7 @@ class Player(pygame.sprite.Sprite):
     def __init__(self):
         super().__init__()
         # Load player image
+        self.bullet = None
         self.image = pygame.transform.rotozoom(  # This function resizes the player image
             pygame.image.load("assets/Top_Down_Survivor/Top_Down_Survivor/handgun/idle/survivor"
                               "-idle_handgun_0.png").convert_alpha(), 0, 0.35)  # Convert alpha smoothens edges

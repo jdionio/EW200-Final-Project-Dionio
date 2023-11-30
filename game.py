@@ -4,7 +4,7 @@ import sys
 # Import necessary files
 from parameters import *
 from player import Player, all_sprites
-from bullet import Bullet
+from bullet import Bullet, bullets
 from enemy import Enemy, enemies
 
 # Initialize pygame
@@ -16,6 +16,9 @@ pygame.display.set_caption('Zombie Shooter')
 background = pygame.image.load("assets/ground.png").convert()
 # Make a clock
 clock = pygame.time.Clock()
+
+# Import sound effects
+pistol_fire = pygame.mixer.Sound('assets/sounds/pistol.mp3')
 
 # Make camera that follows player around map
 class Camera(pygame.sprite.Group):
@@ -47,7 +50,6 @@ all_sprites.add(zombie)
 
 
 
-
 # Main loop
 running = True
 
@@ -66,7 +68,14 @@ while running:
     all_sprites.update()
     # Draw all sprites on screen in accordance to the offset
     camera.custom_draw()
-    # Make enemy hunt player
+
+    # Check for bullet collisions
+    if player.bullet:
+        collide = pygame.sprite.spritecollide(player.bullet, enemies, False)
+        for zombie in enemies:
+            if collide:
+                player.bullet.kill()
+                print('hit')
     # Update display
     pygame.display.flip()
 

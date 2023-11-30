@@ -20,6 +20,7 @@ class Enemy(pygame.sprite.Sprite):
         self.speed = ENEMY_SPEED
         self.velocity = pygame.math.Vector2()
         self.base_image = self.image
+        self.health = ENEMY_HEALTH
 
     def hunt(self):
         player_pos = pygame.math.Vector2(self.player.hitbox_rect.center)
