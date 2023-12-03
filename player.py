@@ -11,9 +11,17 @@ class Player(pygame.sprite.Sprite):
         super().__init__()
         # Load player image
         self.bullet = None
+        self.has_pistol = True
+        self.has_shotgun = False
+        self.has_machinegun = False
+
+        self.equip_pistol = True
+        self.equip_shotgun = False
+        self.equip_machinegun = False
+
         self.image = pygame.transform.rotozoom(  # This function resizes the player image
-            pygame.image.load("assets/Top_Down_Survivor/Top_Down_Survivor/handgun/idle/survivor"
-                              "-idle_handgun_0.png").convert_alpha(), 0, 0.35)  # Convert alpha smoothens edges
+                pygame.image.load("assets/Top_Down_Survivor/Top_Down_Survivor/handgun/idle/survivor-idle_handgun_0.png").convert_alpha(), 0, 0.35)  # Convert alpha smoothens edges
+
         # Note that set_color key wasn't included; not needed for sprite
         # Found a way to put player position into one variable rather than having 2
         self.pos = pygame.math.Vector2(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
@@ -26,6 +34,8 @@ class Player(pygame.sprite.Sprite):
         self.shoot_cooldown = 0
         # We want to create the bullet at the end of the gun barrel, so there will be some offset
         self.gun_barrel_offset = pygame.math.Vector2(GUN_OFFSET_X, GUN_OFFSET_Y)
+        self.health = PLAYER_HEALTH
+        self.angle = 0
 
     # Check if key is pressed and move player accordingly
     def user_input(self):
@@ -33,14 +43,45 @@ class Player(pygame.sprite.Sprite):
         self.y_speed = 0
         keys = pygame.key.get_pressed()
 
-        if keys[pygame.K_w]:
-            self.y_speed = -PLAYER_SPEED
-        if keys[pygame.K_s]:
-            self.y_speed = PLAYER_SPEED
-        if keys[pygame.K_a]:
-            self.x_speed = -PLAYER_SPEED
-        if keys[pygame.K_d]:
-            self.x_speed = PLAYER_SPEED
+        if self.pos[1] <= 350:
+            if keys[pygame.K_w]:
+                self.y_speed = 0
+        else:
+            if keys[pygame.K_w]:
+                self.y_speed = -PLAYER_SPEED
+        if self.pos[1] >= 2743:
+            if keys[pygame.K_s]:
+                self.y_speed = 0
+        else:
+            if keys[pygame.K_s]:
+                self.y_speed = PLAYER_SPEED
+        if self.pos[0] <= 350:
+            if keys[pygame.K_a]:
+                self.x_speed = 0
+        else:
+            if keys[pygame.K_a]:
+                self.x_speed = -PLAYER_SPEED
+        if self.pos[0] >= 4150:
+            if keys[pygame.K_d]:
+                self.x_speed = 0
+        else:
+            if keys[pygame.K_d]:
+                self.x_speed = PLAYER_SPEED
+        if self.equip_pistol == True:
+            if keys[pygame.K_z]:
+                self.has_pistol = True
+                self.has_shotgun = False
+                self.has_machinegun = False
+        if self.equip_shotgun == True:
+            if keys[pygame.K_x]:
+                self.has_pistol = False
+                self.has_shotgun = True
+                self.has_machinegun = False
+        if self.equip_machinegun == True:
+            if keys[pygame.K_c]:
+                self.has_pistol = False
+                self.has_shotgun = False
+                self.has_machinegun = True
 
         # Check if player moves diagonally and prevent player from moving too fast (trig)
         if self.x_speed != 0 and self.y_speed != 0:
@@ -56,14 +97,46 @@ class Player(pygame.sprite.Sprite):
 
     # Make a function to check if player is shooting
     def shooting(self):
+        # Load sounds
+        pistol_fire = pygame.mixer.Sound('assets/sounds/pistol.mp3')
+        shotgun_fire = pygame.mixer.Sound('assets/sounds/shotgun.mp3')
+        machinegun_fire = pygame.mixer.Sound('assets/sounds/machinegun.mp3')
         # Check if player has already shot
         if self.shoot_cooldown == 0:
-            self.shoot_cooldown = SHOOT_COOLDOWN
+            if self.has_pistol == True:
+                self.shoot_cooldown = SHOOT_COOLDOWN
+
+            elif self.has_machinegun == True:
+                self.shoot_cooldown = SHOOT_COOLDOWN * 0.25
+
+            elif self.has_shotgun == True:
+                self.shoot_cooldown = SHOOT_COOLDOWN * 2
+
+            else:
+                self.shoot_cooldown = SHOOT_COOLDOWN
             # Make bullet equal to player position and account for gun barrel offset
-            bullet_pos = self.pos + self.gun_barrel_offset.rotate(self.angle)
-            self.bullet = Bullet(bullet_pos[0], bullet_pos[1], self.angle)
-            bullets.add(self.bullet)
-            all_sprites.add(self.bullet)
+            if self.has_pistol == True:
+                bullet_pos = self.pos + self.gun_barrel_offset.rotate(self.angle)
+                self.bullet = Bullet(bullet_pos[0], bullet_pos[1], self.angle)
+                bullets.add(self.bullet)
+                all_sprites.add(self.bullet)
+                pygame.mixer.Sound.play(pistol_fire)
+            elif self.has_machinegun == True:
+                bullet_pos = self.pos + self.gun_barrel_offset.rotate(self.angle)
+                self.bullet = Bullet(bullet_pos[0], bullet_pos[1], self.angle)
+                bullets.add(self.bullet)
+                all_sprites.add(self.bullet)
+                pygame.mixer.Sound.play(machinegun_fire)
+            elif self.has_shotgun == True:
+                bullet_pos = self.pos + self.gun_barrel_offset.rotate(self.angle)
+                self.bullet1 = Bullet(bullet_pos[0], bullet_pos[1], self.angle - 10)
+                self.bullet2 = Bullet(bullet_pos[0], bullet_pos[1], self.angle - 5)
+                self.bullet3 = Bullet(bullet_pos[0], bullet_pos[1], self.angle)
+                self.bullet4 = Bullet(bullet_pos[0], bullet_pos[1], self.angle + 5)
+                self.bullet5 = Bullet(bullet_pos[0], bullet_pos[1], self.angle + 10)
+                bullets.add(self.bullet1, self.bullet2, self.bullet3, self.bullet4, self.bullet5)
+                all_sprites.add(self.bullet1, self.bullet2, self.bullet3, self.bullet4, self.bullet5)
+                pygame.mixer.Sound.play(shotgun_fire)
 
     def move(self):
         # Creates a vector for speed and adds it to the player position
@@ -73,6 +146,24 @@ class Player(pygame.sprite.Sprite):
 
     # Function to rotate a player based on the location of the pointer
     def rotate_player(self):
+        if self.has_pistol == True:
+
+            self.image = pygame.transform.rotozoom(  # This function resizes the player image
+                pygame.image.load("assets/Top_Down_Survivor/Top_Down_Survivor/handgun/idle/survivor-idle_handgun_0.png").convert_alpha(), 0, 0.35)  # Convert alpha smoothens edges
+
+        elif self.has_shotgun == True:
+
+            self.image = pygame.transform.rotozoom(  # This function resizes the player image
+                pygame.image.load("assets/Top_Down_Survivor/Top_Down_Survivor/shotgun/idle/survivor-idle_shotgun_0.png").convert_alpha(), 0, 0.35)  # Convert alpha smoothens edges
+
+        elif self.has_machinegun == True:
+
+            self.image = pygame.transform.rotozoom(  # This function resizes the player image
+                pygame.image.load("assets/Top_Down_Survivor/Top_Down_Survivor/rifle/idle/survivor-idle_rifle_0.png").convert_alpha(), 0, 0.35)  # Convert alpha smoothens edges
+        else:
+            self.image = pygame.transform.rotozoom(  # This function resizes the player image
+                pygame.image.load("assets/Top_Down_Survivor/Top_Down_Survivor/handgun/idle/survivor-idle_handgun_0.png").convert_alpha(), 0, 0.35)  # Convert alpha smoothens edges
+        self.base_player_image = self.image
         # Crate a variable that tracks mouse position
         self.mouse_pos = pygame.mouse.get_pos()  # Returns a list of an x and y coordinate
         # Variables to find distance between mouse and player (note that player position is in middle of screen as
@@ -90,7 +181,6 @@ class Player(pygame.sprite.Sprite):
         self.user_input()
         self.move()
         self.rotate_player()
-
         # Check if player has shot and activate cooldown
         if self.shoot_cooldown > 0:
             self.shoot_cooldown -= 1

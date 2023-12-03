@@ -49,6 +49,7 @@ class Enemy(pygame.sprite.Sprite):
         self.image = pygame.transform.rotate(self.base_image, -self.angle)
         self.rect = self.image.get_rect(center=self.rect.center)
 
+
     def update(self):
         self.rotate()
         self.hunt()
