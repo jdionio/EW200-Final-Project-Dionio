@@ -203,11 +203,13 @@ while running:
 
         if player_hurt:
             player_hurt = {}
+            player.is_hurt = False
             dmg_cooldown -= 1
         if dmg_cooldown < 0:
             dmg_cooldown = DAMAGE_COOLDOWN
             player.health -= 10
             pygame.mixer.Sound.play(player_oof)
+            player.is_hurt = True
         if player.health <= 0:
             pygame.mixer.Sound.play(death_sound)
         if player.health <= 0:
@@ -235,13 +237,6 @@ while running:
             is_shopping = True
             is_playing = False
             shop_button.button_clicked = False
-
-        if player.pos[0] >= 4320 or player.pos[0] <= 350:
-            if pygame.key.get_pressed()[pygame.K_a]:
-                player.x_speed = 0
-        if player.pos[1] >= SCREEN_HEIGHT:
-            player.y_speed = 0
-        print(player.pos[1])
         # Update display
         pygame.display.flip()
 
@@ -264,28 +259,35 @@ while running:
         buy_machinegun_button.draw(screen, BLACK)
         equip_shotgun_button = Button(GREEN, (SCREEN_WIDTH / 2) + 250, (SCREEN_HEIGHT / 2) - 50, 150, 50, 'EQUIP', BLACK, 1)
         insufficient_funds = game_font.render('INSUFFICIENT FUNDS', True, RED)
+        already_equipped = game_font.render('ALREADY OWNED', True, RED)
 
         if exit_shop.button_clicked == True:
             exit_shop.button_clicked = False
             is_shopping = False
             is_playing = True
         if buy_shotgun_button.button_clicked == True:
-            if money_num >= 10:
+            if player.equip_shotgun == True:
+                screen.blit(already_equipped, ((SCREEN_WIDTH /2) - already_equipped. get_width()/ 2, SCREEN_HEIGHT / 2))
+                buy_shotgun_button.button_clicked = False
+            elif money_num >= 250:
                 player.equip_shotgun = True
                 is_shopping = False
                 is_playing = True
-                money_num -= 10
+                money_num -= 250
                 buy_shotgun_button.button_clicked = False
             else:
                 screen.blit(insufficient_funds, ((SCREEN_WIDTH /2) - insufficient_funds. get_width()/ 2, SCREEN_HEIGHT / 2))
                 buy_shotgun_button.button_clicked = False
 
         if buy_machinegun_button.button_clicked == True:
-            if money_num >= 20:
+            if player.equip_machinegun == True:
+                screen.blit(already_equipped, ((SCREEN_WIDTH /2) - already_equipped. get_width()/ 2, SCREEN_HEIGHT / 2 + 135))
+                buy_machinegun_button.button_clicked = False
+            elif money_num >= 900:
                 player.equip_machinegun = True
                 is_shopping = False
                 is_playing = True
-                money_num -= 20
+                money_num -= 900
                 buy_machinegun_button.button_clicked = False
             else:
                 screen.blit(insufficient_funds, ((SCREEN_WIDTH / 2) - insufficient_funds.get_width() / 2, (SCREEN_HEIGHT / 2) + 135))
@@ -327,6 +329,7 @@ while running:
             player.has_shotgun = False
             player.has_pistol = True
             is_playing = True
+            player.is_hurt = False
             mainmenu = False
             retry_button.button_clicked = False
 

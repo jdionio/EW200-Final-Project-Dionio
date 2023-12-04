@@ -20,7 +20,7 @@ class Player(pygame.sprite.Sprite):
         self.equip_machinegun = False
 
         self.image = pygame.transform.rotozoom(  # This function resizes the player image
-                pygame.image.load("assets/Top_Down_Survivor/Top_Down_Survivor/handgun/idle/survivor-idle_handgun_0.png").convert_alpha(), 0, 0.35)  # Convert alpha smoothens edges
+                pygame.image.load("assets/player/survivor-idle_handgun_0.png").convert_alpha(), 0, 0.35)  # Convert alpha smoothens edges
 
         # Note that set_color key wasn't included; not needed for sprite
         # Found a way to put player position into one variable rather than having 2
@@ -36,6 +36,7 @@ class Player(pygame.sprite.Sprite):
         self.gun_barrel_offset = pygame.math.Vector2(GUN_OFFSET_X, GUN_OFFSET_Y)
         self.health = PLAYER_HEALTH
         self.angle = 0
+        self.is_hurt = False
 
     # Check if key is pressed and move player accordingly
     def user_input(self):
@@ -147,22 +148,33 @@ class Player(pygame.sprite.Sprite):
     # Function to rotate a player based on the location of the pointer
     def rotate_player(self):
         if self.has_pistol == True:
+            if self.is_hurt == True:
 
-            self.image = pygame.transform.rotozoom(  # This function resizes the player image
-                pygame.image.load("assets/Top_Down_Survivor/Top_Down_Survivor/handgun/idle/survivor-idle_handgun_0.png").convert_alpha(), 0, 0.35)  # Convert alpha smoothens edges
+                self.image = pygame.transform.rotozoom(  # This function resizes the player image
+                pygame.image.load("assets/player/player_pistol_hurt.png").convert_alpha(), 0, 0.35)  # Convert alpha smoothens edges
+            else:
+                self.image = pygame.transform.rotozoom(  # This function resizes the player image
+                pygame.image.load("assets/player/survivor-idle_handgun_0.png").convert_alpha(), 0, 0.35)  # Convert alpha smoothens edges
 
         elif self.has_shotgun == True:
-
-            self.image = pygame.transform.rotozoom(  # This function resizes the player image
-                pygame.image.load("assets/Top_Down_Survivor/Top_Down_Survivor/shotgun/idle/survivor-idle_shotgun_0.png").convert_alpha(), 0, 0.35)  # Convert alpha smoothens edges
+            if self.is_hurt == True:
+                self.image = self.image = pygame.transform.rotozoom(  # This function resizes the player image
+                pygame.image.load("assets/player/player_hurt_shotgun.png").convert_alpha(), 0, 0.35)  # Convert alpha smoothens edges
+            else:
+                self.image = pygame.transform.rotozoom(  # This function resizes the player image
+                pygame.image.load("assets/player/survivor-idle_shotgun_0.png").convert_alpha(), 0, 0.35)  # Convert alpha smoothens edges
 
         elif self.has_machinegun == True:
+            if self.is_hurt == True:
+                self.image = pygame.transform.rotozoom(  # This function resizes the player image
+                pygame.image.load("assets/player/player_machinegun_hurt.png").convert_alpha(), 0, 0.35)  # Convert alpha smoothens edges
 
-            self.image = pygame.transform.rotozoom(  # This function resizes the player image
-                pygame.image.load("assets/Top_Down_Survivor/Top_Down_Survivor/rifle/idle/survivor-idle_rifle_0.png").convert_alpha(), 0, 0.35)  # Convert alpha smoothens edges
+            else:
+                self.image = pygame.transform.rotozoom(  # This function resizes the player image
+                pygame.image.load("assets/player/survivor-idle_rifle_0.png").convert_alpha(), 0, 0.35)  # Convert alpha smoothens edges
         else:
             self.image = pygame.transform.rotozoom(  # This function resizes the player image
-                pygame.image.load("assets/Top_Down_Survivor/Top_Down_Survivor/handgun/idle/survivor-idle_handgun_0.png").convert_alpha(), 0, 0.35)  # Convert alpha smoothens edges
+                pygame.image.load("assets/player/survivor-idle_handgun_0.png").convert_alpha(), 0, 0.35)  # Convert alpha smoothens edges
         self.base_player_image = self.image
         # Crate a variable that tracks mouse position
         self.mouse_pos = pygame.mouse.get_pos()  # Returns a list of an x and y coordinate
