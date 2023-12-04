@@ -303,6 +303,21 @@ while running:
         game_over_message = game_font.render("GAME OVER", True, RED)
         screen.blit(game_over_message, (SCREEN_WIDTH / 2 - game_over_message.get_width() / 2, SCREEN_HEIGHT / 2))
 
+        high_score_num = 0
+        with open('assets/highscore.txt', 'r') as highscore:
+            x = highscore.readlines()
+            high_score_num = int(x[0])
+
+            if score > high_score_num:
+                with open('assets/highscore.txt', 'w') as new_highscore:
+                    new_highscore.write(f'{score}')
+                    high_score_num = score
+                new_highscore_text = game_font.render(f'NEW HIGH SCORE {high_score_num}', True, RED)
+                screen.blit(new_highscore_text, (0,0))
+            else:
+                highscore_text = game_font.render(f'HIGH SCORE {high_score_num}', True, RED)
+                screen.blit(highscore_text, (0,0))
+
         # Show final score
         final_score = game_font.render(f'FINAL SCORE  {score}', True, RED)
         screen.blit(final_score,
