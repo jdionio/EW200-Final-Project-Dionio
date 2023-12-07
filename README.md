@@ -13,9 +13,15 @@ Help:
 Sam Chom
 
 Sources:
+Base Top Down Shooter Code:
 https://www.youtube.com/watch?v=OUOI6iCrmCk
 https://www.youtube.com/watch?v=wu1cd1Qycz4
 https://www.youtube.com/watch?v=paItMJuKwwM
 https://www.youtube.com/watch?v=IhJCpya_FW8
+
+Scrolling Camera:
+https://www.youtube.com/watch?v=u7LPRqrzry8&pp=ygUNcHlnYW1lIGNhbWVyYQ%3D%3D
+
+Button Class:
 https://stackoverflow.com/questions/63435298/how-to-create-a-button-class-in-pygame
 https://stackoverflow.com/questions/65247656/how-do-i-change-the-volume-of-the-sound-or-music-in-pygame
