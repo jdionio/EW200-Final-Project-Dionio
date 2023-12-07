@@ -109,8 +109,8 @@ def display_shop():
     screen.blit(shop_title, ((SCREEN_WIDTH / 2) - (shop_title.get_width() / 2), (SCREEN_HEIGHT / 2) - SHOP_HEIGHT / 2))
     # Buyable items text
     buy_pistol = game_font.render('PISTOL OWNED', True, BLACK)
-    buy_shotgun = game_font.render('SHOTGUN  25', True, BLACK)
-    buy_machinegun = game_font.render('MACHINEGUN  75', True, BLACK)
+    buy_shotgun = game_font.render('SHOTGUN  250', True, BLACK)
+    buy_machinegun = game_font.render('MACHINEGUN  750', True, BLACK)
     screen.blit(buy_pistol,((SCREEN_WIDTH/ 2) - (buy_pistol.get_width() / 2), (SCREEN_HEIGHT / 2) - 8*(buy_pistol.get_height() / 2)))
     screen.blit(buy_shotgun, ((SCREEN_WIDTH/ 2) - (buy_shotgun.get_width() / 2), (SCREEN_HEIGHT / 2) - 2*(buy_shotgun.get_height() / 2)))
     screen.blit(buy_machinegun, ((SCREEN_WIDTH / 2) - (buy_machinegun.get_width() / 2), (SCREEN_HEIGHT / 2) + 4*(buy_machinegun.get_height() / 2)))
@@ -269,11 +269,11 @@ while running:
             if player.equip_shotgun == True:
                 screen.blit(already_equipped, ((SCREEN_WIDTH /2) - already_equipped. get_width()/ 2, SCREEN_HEIGHT / 2))
                 buy_shotgun_button.button_clicked = False
-            elif money_num >= 25:
+            elif money_num >= 250:
                 player.equip_shotgun = True
                 is_shopping = False
                 is_playing = True
-                money_num -= 25
+                money_num -= 250
                 buy_shotgun_button.button_clicked = False
             else:
                 screen.blit(insufficient_funds, ((SCREEN_WIDTH /2) - insufficient_funds. get_width()/ 2, SCREEN_HEIGHT / 2))
@@ -283,11 +283,11 @@ while running:
             if player.equip_machinegun == True:
                 screen.blit(already_equipped, ((SCREEN_WIDTH /2) - already_equipped. get_width()/ 2, SCREEN_HEIGHT / 2 + 135))
                 buy_machinegun_button.button_clicked = False
-            elif money_num >= 75:
+            elif money_num >= 750:
                 player.equip_machinegun = True
                 is_shopping = False
                 is_playing = True
-                money_num -= 75
+                money_num -= 750
                 buy_machinegun_button.button_clicked = False
             else:
                 screen.blit(insufficient_funds, ((SCREEN_WIDTH / 2) - insufficient_funds.get_width() / 2, (SCREEN_HEIGHT / 2) + 135))
