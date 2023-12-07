@@ -10,7 +10,7 @@ You can use the cash in the shop to buy better weapons and kill more zombies!
 Have fun!
 
 Help:
-Sam Chom
+Sam Chon
 
 Sources:
 Base Top Down Shooter Code:
